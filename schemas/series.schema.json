@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "series.schema.json",
+    "title": "Series",
+    "type": "object",
+    "properties": {
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "playlist_id": { "type": "string" },
+        "intro_card": { "type": "string" },
+        "banner": { "type": "string" }
+    },
+    "required": ["slug", "title"],
+    "additionalProperties": false
+}

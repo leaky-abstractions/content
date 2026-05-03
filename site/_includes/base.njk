@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{{ title }} — Leaky Abstractions</title>
+        {% if summary %}
+        <meta name="description" content="{{ summary }}" />
+        {% endif %}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="/css/terminal.css" />
+        <script>
+            (function() {
+                var saved = localStorage.getItem('theme');
+                if (saved) {
+                    try {
+                        var colors = JSON.parse(saved);
+                        var root = document.documentElement;
+                        Object.keys(colors).forEach(function(key) {
+                            root.style.setProperty('--' + key, colors[key]);
+                        });
+                    } catch(e) {}
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <script>
+            var FILETREE = {{ filetree | dump | safe }};
+            var CURRENT_PATH = {{ virtualPath | dump | safe }};
+        </script>
+        <div class="terminal">
+            <div class="terminal-chrome">
+                <div class="dots">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                </div>
+                <span class="title" id="breadcrumbs"></span>
+                <script>
+                    (function() {
+                        var parts = CURRENT_PATH.split('/').filter(Boolean);
+                        if (parts[0] === '~') parts[0] = 'leaky-abstractions';
+                        var bc = document.getElementById('breadcrumbs');
+                        var tree = FILETREE['~'];
+                        var urls = ['/'];
+                        var node = tree;
+                        for (var i = 1; i < parts.length; i++) {
+                            if (node.children && node.children[parts[i]]) {
+                                node = node.children[parts[i]];
+                                urls.push(node.url || null);
+                            } else {
+                                urls.push(null);
+                            }
+                        }
+                        parts.forEach(function(part, i) {
+                            if (i > 0) {
+                                var sep = document.createElement('span');
+                                sep.className = 'sep';
+                                sep.textContent = ' / ';
+                                bc.appendChild(sep);
+                            }
+                            if (i === parts.length - 1) {
+                                bc.appendChild(document.createTextNode(part));
+                            } else {
+                                var a = document.createElement('a');
+                                a.href = urls[i] || '/';
+                                a.textContent = part;
+                                bc.appendChild(a);
+                            }
+                        });
+                    })();
+                </script>
+                <div style="position: relative; margin-left: auto;">
+                    <button class="theme-toggle" onclick="toggleThemePicker()" aria-label="Change theme">&#9881;</button>
+                    <div class="theme-picker" id="theme-picker"></div>
+                </div>
+            </div>
+            <div class="terminal-body">
+                {% if page.inputPath and "episodes/" in page.inputPath and "blog.md" in page.inputPath %}
+                {% set episodeSlug = page.inputPath | replace("./", "") | replace("/blog.md", "") | replace("episodes/_series/", "") | replace("episodes/", "") %}
+                {% set catSlug = episodeSlug.split("/") | last %}
+                {% set vDir = virtualPath.replace("/" + catSlug + ".md", "") %}
+                {% set parentUrl = vDir | replace("~", "") | default("/") %}
+                {% if parentUrl != "/" %}{% set parentUrl = parentUrl + "/" %}{% endif %}
+                <div class="section">
+                    <div class="prompt"><span class="path">{{ vDir }}</span> <span class="dollar">$</span> cat {{ catSlug }}.md</div>
+                    <div class="post-content">
+                        {{ content | safe }}
+                    </div>
+                </div>
+                <div class="back-link">
+                    <a href="{{ parentUrl }}">&larr; cd ..</a>
+                </div>
+                {% else %}
+                {{ content | safe }}
+                {% endif %}
+
+                <div class="input-line">
+                    <span class="prompt-prefix"><span class="path" id="prompt-path"></span> <span class="dollar">$</span></span>
+                    <div class="input-wrap">
+                        <input type="text" id="shell-input" aria-label="Terminal input" autocomplete="off" spellcheck="false" />
+                        <span class="autocomplete-hint" id="shell-hint"></span>
+                    </div>
+                </div>
+                <div id="shell-output"></div>
+                <script>
+                    (function() {
+                        document.getElementById('shell-input').focus();
+                        var pp = CURRENT_PATH;
+                        if (pp.endsWith('.md')) {
+                            pp = pp.substring(0, pp.lastIndexOf('/'));
+                        }
+                        document.getElementById('prompt-path').textContent = pp;
+                    })();
+                </script>
+            </div>
+        </div>
+        <script src="/js/themes.js"></script>
+        <script src="/js/shell.js"></script>
+    </body>
+</html>

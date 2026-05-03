@@ -1,0 +1,15 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "blog-frontmatter.schema.json",
+    "title": "Blog Frontmatter",
+    "type": "object",
+    "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "summary": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "draft": { "type": "boolean", "default": false }
+    },
+    "required": ["title", "date", "summary"],
+    "additionalProperties": false
+}

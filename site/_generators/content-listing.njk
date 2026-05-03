@@ -1,0 +1,32 @@
+---
+pagination:
+    data: contentListings
+    size: 1
+    alias: listing
+permalink: "/{{ listing.dirName }}/index.html"
+layout: base.njk
+eleventyComputed:
+    title: "{{ listing.dirName }}"
+    virtualPath: "~/{{ listing.dirName }}"
+---
+
+{% if listing.readme | length %}
+<div class="section">
+    <div class="prompt"><span class="path">~/{{ listing.dirName }}</span> <span class="dollar">$</span> cat README.md</div>
+    <div class="welcome">{{ listing.readme | md | safe }}</div>
+</div>
+{% endif %}
+
+<div class="section">
+    <div class="prompt"><span class="path">~/{{ listing.dirName }}</span> <span class="dollar">$</span> ls -lt</div>
+    {% for page in listing.pages %}
+    <div class="post">
+        <div class="post-title">
+            <a href="{{ page.url }}">{{ page.title }}</a>
+        </div>
+        <div class="post-meta">
+            {% if page.date %}<span class="date">{{ page.date }}</span>{% if page.summary %} — {% endif %}{% endif %}{{ page.summary }}
+        </div>
+    </div>
+    {% endfor %}
+</div>

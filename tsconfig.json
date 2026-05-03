@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "jsx": "preserve",
+        "jsxImportSource": "@motion-canvas/2d/lib",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "@style/*": ["packages/style/src/*"]
+        }
+    },
+    "include": ["env.d.ts", "packages/**/*.ts", "packages/**/*.tsx", "episodes/**/*.ts", "episodes/**/*.tsx"],
+    "exclude": ["node_modules", "_site", "dist"]
+}

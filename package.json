@@ -1,0 +1,38 @@
+{
+    "name": "videos",
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "dev:scenes": "vite",
+        "build:scenes": "vite build",
+        "dev:blog": "eleventy --serve",
+        "build:blog": "eleventy",
+        "validate": "bun scripts/validate-content.ts",
+        "prebuild": "bun run validate",
+        "build": "bun run build:blog"
+    },
+    "dependencies": {
+        "@motion-canvas/2d": "^3.0.0",
+        "@motion-canvas/core": "^3.0.0",
+        "@motion-canvas/ui": "^3.0.0",
+        "@motion-canvas/vite-plugin": "^3.0.0",
+        "markdown-it": "^14.1.1"
+    },
+    "devDependencies": {
+        "@11ty/eleventy": "^3.0.0",
+        "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
+        "@types/bun": "^1.3.13",
+        "@types/js-yaml": "^4.0.9",
+        "ajv": "^8.0.0",
+        "ajv-formats": "^3.0.0",
+        "fast-glob": "^3.0.0",
+        "gray-matter": "^4.0.0",
+        "js-yaml": "^4.0.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0"
+    }
+}

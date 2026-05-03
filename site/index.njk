@@ -1,0 +1,43 @@
+---
+title: Home
+permalink: /index.html
+virtualPath: "~"
+---
+
+<div class="section">
+    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> cat welcome.md</div>
+    <div class="welcome">{{ welcome | md | safe }}</div>
+</div>
+
+<div class="section">
+    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls -lt episodes/</div>
+    {% for post in collections.standaloneEpisodes %}
+    <div class="post">
+        <div class="post-title">
+            <a href="{{ post.url }}">{{ post.data.title }}</a>
+        </div>
+        <div class="post-meta">
+            <span class="date">{{ post.date | date }}</span> — {{ post.data.summary }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for series in allSeriesData %}
+    <div class="post series">
+        <div class="post-title">
+            <a href="/episodes/{{ series.slug }}/">{{ series.slug }}/</a>
+        </div>
+        <div class="post-meta">
+            {{ series.episodes.length }} episode{% if series.episodes.length != 1 %}s{% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="section">
+    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls links/</div>
+    <div class="links">
+        {% for link in links %}
+        <a href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>{{ link.name }}</a>
+        {% endfor %}
+    </div>
+</div>

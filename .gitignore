@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Build output
+_site/
+dist/
+
+# Cache
+.cache/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Agents
+.remember/
+.claude/
+.superpowers/
+
+# Motion Canvas output
+output/
+**/output/
+
+# Devenv
+.devenv/
+.devenv.flake.nix
+
+# Direnv
+.direnv/
+!.envrc
+
+# Godot
+.godot/
+*.import
+
+# Unity
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+
+# Unreal
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.VC.db
+
+# Nim
+nimcache/

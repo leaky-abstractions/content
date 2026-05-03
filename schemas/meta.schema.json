@@ -1,0 +1,23 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "meta.schema.json",
+    "title": "Episode Meta",
+    "type": "object",
+    "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "youtube_id": { "type": "string" },
+        "series": { "type": "string" },
+        "episode": { "type": "integer" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "draft": { "type": "boolean", "default": false }
+    },
+    "required": ["title", "date", "youtube_id"],
+    "additionalProperties": false,
+    "if": {
+        "required": ["series"]
+    },
+    "then": {
+        "required": ["series", "episode"]
+    }
+}

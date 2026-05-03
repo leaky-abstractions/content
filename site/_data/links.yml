@@ -1,0 +1,14 @@
+- name: episodes/
+  url: /episodes/
+  type: symlink
+  target: '~/episodes/'
+- name: github
+  url: https://github.com/leaky-abstractions/videos
+  external: true
+- name: youtube
+  url: https://youtube.com/@leakyabstractions
+  external: true
+- name: legal/
+  url: /legal/
+  type: symlink
+  target: '~/legal/'

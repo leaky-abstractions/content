@@ -1,0 +1,34 @@
+---
+pagination:
+    data: allSeriesData
+    size: 1
+    alias: seriesData
+permalink: "/episodes/{{ seriesData.slug }}/index.html"
+layout: base.njk
+eleventyComputed:
+    title: "{{ seriesData.title }}"
+    virtualPath: "~/episodes/{{ seriesData.slug }}"
+---
+
+<div class="section">
+    <div class="prompt"><span class="path">~/episodes/{{ seriesData.slug }}</span> <span class="dollar">$</span> cat README.md</div>
+    <div class="welcome">{{ seriesData.readme | md | safe }}</div>
+</div>
+
+<div class="section">
+    <div class="prompt"><span class="path">~/episodes/{{ seriesData.slug }}</span> <span class="dollar">$</span> ls -lt</div>
+    {% if seriesData.episodes.length %}
+    {% for ep in seriesData.episodes %}
+    <div class="post">
+        <div class="post-title">
+            <a href="{{ ep.url }}">{{ ep.title }}</a>
+        </div>
+        <div class="post-meta">
+            <span class="date">{{ ep.date }}</span> — {{ ep.summary }}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No episodes yet.</p>
+    {% endif %}
+</div>

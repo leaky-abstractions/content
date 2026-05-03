@@ -1,0 +1,18 @@
+# Leaky Abstractions
+
+> A YouTube channel and blog exploring software engineering through animation and deep dives.
+
+## Repository
+
+This is the source repository for all Leaky Abstractions video and blog content.
+
+- Repo: https://github.com/mrbandler/videos
+- Channel: Leaky Abstractions
+
+## Content
+
+Each episode includes animated scenes (Motion Canvas), a companion blog post, video script, YouTube description, and captions. Episodes may be standalone or part of a series.
+
+## Per-Page Context
+
+Individual blog pages include a `<script type="text/llms.txt">` block in the HTML head with a summary of that page's content.

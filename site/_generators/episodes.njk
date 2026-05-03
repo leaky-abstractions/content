@@ -1,0 +1,33 @@
+---
+title: Episodes
+permalink: /episodes/index.html
+virtualPath: "~/episodes"
+---
+
+<div class="section">
+    <div class="prompt"><span class="path">~/episodes</span> <span class="dollar">$</span> ls -lt</div>
+    {% if collections.standaloneEpisodes.length or allSeriesData.length %}
+    {% for post in collections.standaloneEpisodes %}
+    <div class="post">
+        <div class="post-title">
+            <a href="{{ post.url }}">{{ post.data.title }}</a>
+        </div>
+        <div class="post-meta">
+            <span class="date">{{ post.date | date }}</span> — {{ post.data.summary }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for series in allSeriesData %}
+    <div class="post series">
+        <div class="post-title">
+            <a href="/episodes/{{ series.slug }}/">{{ series.slug }}/</a>
+        </div>
+        <div class="post-meta">
+            {{ series.episodes.length }} episode{% if series.episodes.length != 1 %}s{% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No episodes yet.</p>
+    {% endif %}
+</div>

@@ -1,0 +1,21 @@
+---
+pagination:
+    data: contentPages
+    size: 1
+    alias: contentPage
+permalink: "/{{ contentPage.dirName }}/{{ contentPage.slug }}/index.html"
+layout: base.njk
+eleventyComputed:
+    title: "{{ contentPage.title }}"
+    virtualPath: "~/{{ contentPage.dirName }}/{{ contentPage.slug }}.md"
+---
+
+<div class="section">
+    <div class="prompt"><span class="path">~/{{ contentPage.dirName }}</span> <span class="dollar">$</span> cat {{ contentPage.slug }}.md</div>
+    <div class="post-content">
+        {{ contentPage.content | md | safe }}
+    </div>
+</div>
+<div class="back-link">
+    <a href="/{{ contentPage.dirName }}/">&larr; cd ..</a>
+</div>
