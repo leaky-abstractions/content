@@ -137,6 +137,11 @@ a:hover {
     padding: 24px;
     flex: 1;
     overflow-y: auto;
+    scrollbar-color: var(--base02) var(--base00);
+}
+
+.terminal {
+    scrollbar-color: var(--base02) var(--base00);
 }
 
 .prompt {
