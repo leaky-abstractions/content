@@ -111,10 +111,10 @@
                     (function() {
                         var shellInput = document.getElementById('shell-input');
                         if (window.matchMedia('(pointer: fine)').matches) {
-                            shellInput.focus();
+                            shellInput.focus({ preventScroll: true });
                             document.addEventListener('click', function(e) {
                                 if (!e.target.closest('a, button, input, .theme-picker')) {
-                                    shellInput.focus();
+                                    shellInput.focus({ preventScroll: true });
                                 }
                             });
                         }
