@@ -114,6 +114,11 @@
     updateCursor();
 
     // --- Search overlay ---
+    var searchShortcut = document.getElementById('search-shortcut');
+    if (searchShortcut) {
+        searchShortcut.textContent = navigator.platform.indexOf('Mac') > -1 ? '⌘K' : 'Ctrl+K';
+        searchShortcut.addEventListener('click', openSearch);
+    }
     var searchBtn = document.getElementById('search-btn');
     var searchOverlay = document.getElementById('search-overlay');
     var searchInput = document.getElementById('search-input');
@@ -197,9 +202,9 @@
                 }
                 var search = await window._pagefind.search(query);
                 searchResults.textContent = '';
-                activeIndex = -1;
 
                 if (search.results.length === 0) {
+                    activeIndex = -1;
                     var empty = document.createElement('div');
                     empty.className = 'search-results-empty';
                     empty.textContent = 'no results for "' + query + '"';
@@ -235,6 +240,12 @@
 
                     searchResults.appendChild(link);
                 });
+                if (activeIndex < 0) {
+                    activeIndex = 0;
+                } else if (activeIndex >= results.length) {
+                    activeIndex = results.length - 1;
+                }
+                updateActive();
             } catch (e) {
                 searchResults.textContent = '';
                 var err = document.createElement('div');

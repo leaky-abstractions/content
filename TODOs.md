@@ -3,7 +3,7 @@ Terminal immersion:
 - [x] 404 page — command not found themed error page
 
 Content & navigation:
-- [ ] Search — a find or grep command in the shell that searches across episodes
+- [x] Search — a find or grep command in the shell that searches across episodes
 - [ ] Table of contents — on long posts, maybe a head command or a sidebar showing headings
 - [x] Code block copy button — small clipboard icon on hover for code snippets
 - [x] Open Graph meta tags — so sharing links on social media/Discord shows a nice preview with title,
