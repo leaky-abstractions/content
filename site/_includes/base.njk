@@ -39,49 +39,6 @@
                     <div class="dot dot-green"></div>
                 </div>
                 <span class="title" id="breadcrumbs"></span>
-                <script>
-                    (function() {
-                        var parts = CURRENT_PATH.split('/').filter(Boolean);
-                        if (parts[0] === '~') parts[0] = 'leaky-abstractions';
-                        var bc = document.getElementById('breadcrumbs');
-                        var tree = FILETREE['~'];
-                        var urls = ['/'];
-                        var node = tree;
-                        for (var i = 1; i < parts.length; i++) {
-                            if (node.children && node.children[parts[i]]) {
-                                node = node.children[parts[i]];
-                                urls.push(node.url || null);
-                            } else {
-                                urls.push(null);
-                            }
-                        }
-                        var isMobile = window.innerWidth <= 600;
-                        var startIndex = 0;
-                        if (isMobile && parts.length > 2) {
-                            startIndex = parts.length - 2;
-                            var ellipsis = document.createElement('a');
-                            ellipsis.href = urls[startIndex - 1] || '/';
-                            ellipsis.textContent = '...'
-                            bc.appendChild(ellipsis);
-                        }
-                        for (var i = startIndex; i < parts.length; i++) {
-                            if (i > 0 || startIndex > 0) {
-                                var sep = document.createElement('span');
-                                sep.className = 'sep';
-                                sep.textContent = ' / ';
-                                bc.appendChild(sep);
-                            }
-                            if (i === parts.length - 1) {
-                                bc.appendChild(document.createTextNode(parts[i]));
-                            } else {
-                                var a = document.createElement('a');
-                                a.href = urls[i] || '/';
-                                a.textContent = parts[i];
-                                bc.appendChild(a);
-                            }
-                        }
-                    })();
-                </script>
                 <div style="position: relative; margin-left: auto;">
                     <button class="theme-toggle" onclick="toggleThemePicker()" aria-label="Change theme">&#9881;</button>
                     <div class="theme-picker" id="theme-picker"></div>
@@ -116,44 +73,9 @@
                     </div>
                 </div>
                 <div id="shell-output"></div>
-                <script>
-                    (function() {
-                        var shellInput = document.getElementById('shell-input');
-                        if (window.matchMedia('(pointer: fine)').matches) {
-                            shellInput.focus({ preventScroll: true });
-                            document.addEventListener('click', function(e) {
-                                if (!e.target.closest('a, button, input, .theme-picker')) {
-                                    shellInput.focus({ preventScroll: true });
-                                }
-                            });
-                        }
-                        var pp = CURRENT_PATH;
-                        if (pp.endsWith('.md')) {
-                            pp = pp.substring(0, pp.lastIndexOf('/'));
-                        }
-                        document.getElementById('prompt-path').textContent = pp;
-                    })();
-                </script>
             </div>
         </div>
-        <script>
-            (function() {
-                if (window.innerWidth > 600) return;
-                var chrome = document.querySelector('.terminal-chrome');
-                var scroller = document.querySelector('.terminal');
-                var lastScrollTop = 0;
-
-                scroller.addEventListener('scroll', function() {
-                    var st = scroller.scrollTop;
-                    if (st > lastScrollTop && st > chrome.offsetHeight) {
-                        chrome.classList.add('chrome-hidden');
-                    } else if (st < lastScrollTop) {
-                        chrome.classList.remove('chrome-hidden');
-                    }
-                    lastScrollTop = st;
-                }, { passive: true });
-            })();
-        </script>
+        <script src="{{ pathPrefix }}/js/interaction.js"></script>
         <script src="{{ pathPrefix }}/js/themes.js"></script>
         <script src="{{ pathPrefix }}/js/shell.js"></script>
     </body>

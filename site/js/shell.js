@@ -25,7 +25,7 @@
             for (var i = 0; i < segments.length; i++) {
                 if (segments[i] === '..') {
                     parts.pop();
-                } else {
+                } else if (segments[i] !== '.') {
                     parts.push(segments[i]);
                 }
             }
