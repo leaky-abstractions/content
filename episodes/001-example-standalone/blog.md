@@ -17,7 +17,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor i
 
 Every abstraction leaks eventually. The question is not whether your carefully constructed layers will break down, but when. Consider the following example:
 
-```javascript
+```javascript/1,2
 async function fetchUser(id) {
     const response = await fetch(`/api/users/${id}`);
     return response.json();

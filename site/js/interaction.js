@@ -113,6 +113,22 @@
     shellInput.addEventListener('blur', function () { cursor.style.display = 'none'; });
     updateCursor();
 
+    // --- Code block copy buttons ---
+    document.querySelectorAll('.post-content pre').forEach(function (pre) {
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = 'copy';
+        btn.addEventListener('click', function () {
+            var code = pre.querySelector('code');
+            var text = (code || pre).textContent;
+            navigator.clipboard.writeText(text).then(function () {
+                btn.textContent = 'copied!';
+                setTimeout(function () { btn.textContent = 'copy'; }, 1500);
+            });
+        });
+        pre.appendChild(btn);
+    });
+
     // --- Prompt path ---
     var pp = CURRENT_PATH;
     if (pp.endsWith('.md')) {

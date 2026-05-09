@@ -309,12 +309,58 @@ h2,
     padding: 16px;
     overflow-x: auto;
     margin-bottom: 1rem;
+    position: relative;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: var(--base02);
+    color: var(--base04);
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 0.71rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.post-content pre:hover .copy-btn {
+    opacity: 1;
+}
+
+.copy-btn:hover {
+    color: var(--base05);
+    background: var(--base03);
 }
 
 .post-content pre code {
     background: none;
     border: none;
     padding: 0;
+}
+
+.highlight-line-active,
+.highlight-line-add,
+.highlight-line-remove {
+    border-radius: 3px;
+    padding: 1px 4px;
+}
+
+.highlight-line-active {
+    background: var(--base02);
+    color: inherit;
+}
+
+.highlight-line-add {
+    background: color-mix(in srgb, var(--base0B) 15%, transparent);
+}
+
+.highlight-line-remove {
+    background: color-mix(in srgb, var(--base08) 15%, transparent);
 }
 
 .post-content a {

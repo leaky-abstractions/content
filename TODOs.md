@@ -8,7 +8,7 @@ like someone's typing
 Content & navigation:
 - [ ] Search — a find or grep command in the shell that searches across episodes
 - [ ] Table of contents — on long posts, maybe a head command or a sidebar showing headings
-- [ ] Code block copy button — small clipboard icon on hover for code snippets
+- [x] Code block copy button — small clipboard icon on hover for code snippets
 - [x] Open Graph meta tags — so sharing links on social media/Discord shows a nice preview with title,
 description, and maybe a themed image
 
