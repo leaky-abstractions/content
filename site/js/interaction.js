@@ -393,45 +393,32 @@
         }, { passive: true });
     }
 
-    // --- Mobile swipe for prev/next episode ---
-    if (isMobilePage) {
-        var touchStartX = 0;
-        var touchStartY = 0;
-        var terminalBody = document.querySelector('.terminal-body');
+    // --- Page transitions ---
+    var tBody = document.querySelector('.terminal-body');
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('a');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || link.target === '_blank' || link.hasAttribute('download')) return;
+        if (link.origin && link.origin !== window.location.origin) return;
 
-        if (terminalBody) {
-            terminalBody.addEventListener('touchstart', function (e) {
-                touchStartX = e.touches[0].clientX;
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
+        e.preventDefault();
+        tBody.style.transform = 'translateY(-40px)';
+        tBody.style.opacity = '0';
+        setTimeout(function () {
+            window.location.href = href;
+        }, 100);
+    });
 
-            terminalBody.addEventListener('touchend', function (e) {
-                var dx = e.changedTouches[0].clientX - touchStartX;
-                var dy = e.changedTouches[0].clientY - touchStartY;
-
-                // Only trigger on horizontal swipes (not vertical scrolling)
-                if (Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx)) return;
-
-                var backLink = document.querySelector('.back-link');
-                if (!backLink) return;
-
-                if (dx > 0) {
-                    // Swipe right → previous episode
-                    var prev = backLink.querySelector('a[href*="cat "]') || backLink.querySelector('a:nth-child(2)');
-                    if (prev && prev.textContent.indexOf('←') > -1 && prev.textContent.indexOf('cat') > -1) {
-                        window.location.href = prev.href;
-                    }
-                } else {
-                    // Swipe left → next episode
-                    var links = backLink.querySelectorAll('a');
-                    for (var i = 0; i < links.length; i++) {
-                        if (links[i].textContent.indexOf('→') > -1) {
-                            window.location.href = links[i].href;
-                            break;
-                        }
-                    }
-                }
-            }, { passive: true });
-        }
-    }
+    // New content slides up from just below
+    tBody.style.transition = 'none';
+    tBody.style.transform = 'translateY(20px)';
+    tBody.style.opacity = '0';
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            tBody.style.transition = 'transform 0.1s ease-out, opacity 0.1s ease-out';
+            tBody.style.transform = '';
+            tBody.style.opacity = '1';
+        });
+    });
 })();

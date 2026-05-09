@@ -67,6 +67,7 @@ a:hover {
     border-bottom: 1px solid var(--base02);
     flex-shrink: 0;
     position: relative;
+    z-index: 2;
 }
 
 .reading-progress {
@@ -103,6 +104,7 @@ a:hover {
 }
 
 .terminal-chrome .title {
+    transition: opacity 0.1s ease;
     color: var(--base05);
     font-size: 1rem;
     margin-left: 8px;
@@ -170,6 +172,7 @@ a:hover {
 }
 
 .terminal-body {
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
     padding: 24px;
     flex: 1;
     overflow-y: auto;
