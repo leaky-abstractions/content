@@ -2,13 +2,17 @@
   url: /episodes/
   type: symlink
   target: '~/episodes/'
-- name: github
-  url: https://github.com/leaky-abstractions/videos
-  external: true
-- name: youtube
-  url: https://youtube.com/@leakyabstractions
-  external: true
+  icon: fa-solid fa-folder
 - name: legal/
   url: /legal/
   type: symlink
   target: '~/legal/'
+  icon: fa-solid fa-scale-balanced
+- name: github
+  url: https://github.com/leaky-abstractions/videos
+  external: true
+  icon: fa-brands fa-github
+- name: youtube
+  url: https://youtube.com/@leakyabstractions
+  external: true
+  icon: fa-brands fa-youtube

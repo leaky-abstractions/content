@@ -188,6 +188,7 @@ function buildContentDirData() {
                     title,
                     summary,
                     date,
+                    tags: fm.tags || [],
                     content: body,
                     url: prefixUrl('/' + dirName + '/' + slug + '/'),
                 };
@@ -249,12 +250,13 @@ function buildSeriesData() {
                 date: new Date(epMeta.date).toISOString().slice(0, 10),
                 episode: epMeta.episode || 0,
                 summary: blogData.summary || '',
+                tags: blogData.tags || [],
                 url: prefixUrl('/episodes/' + slug + '/' + epSlug + '/'),
             });
         }
         episodes.sort((a, b) => a.episode - b.episode);
 
-        return { slug, title: meta.title, readme, episodes };
+        return { slug, title: meta.title, description: meta.description || '', readme, episodes };
     });
 }
 

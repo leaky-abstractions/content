@@ -21,14 +21,17 @@ eleventyComputed:
     {% for ep in seriesData.episodes %}
     <div class="post">
         <div class="post-title">
-            <a href="{{ ep.url }}">{{ ep.title }}</a>
+            <a href="{{ ep.url }}"><i class="fa-brands fa-markdown"></i> <span class="link-text">{{ ep.title }}</span></a>
         </div>
         <div class="post-meta">
-            <span class="date">{{ ep.date }}</span> — {{ ep.summary }}
+            <span class="date">{{ ep.date }}</span> — {{ ep.summary }}{% for tag in ep.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
         </div>
     </div>
     {% endfor %}
     {% else %}
     <p>No episodes yet.</p>
     {% endif %}
+</div>
+<div class="back-link">
+    <a href="{{ pathPrefix }}/episodes/">&larr; cd ..</a>
 </div>

@@ -10,6 +10,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ pathPrefix }}/css/terminal.css" />
         <link rel="alternate" type="application/atom+xml" title="Leaky Abstractions" href="{{ pathPrefix }}/feed.xml" />
         <script defer src="https://cloud.umami.is/script.js" data-website-id="54bb7844-a369-4bf4-9771-0f3da70999a0"></script>
@@ -41,9 +42,20 @@
                     <div class="dot dot-green"></div>
                 </div>
                 <span class="title" id="breadcrumbs"></span>
-                <div style="position: relative; margin-left: auto;">
-                    <button class="theme-toggle" onclick="toggleThemePicker()" aria-label="Change theme">&#9881;</button>
-                    <div class="theme-picker" id="theme-picker"></div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+                    <a href="https://github.com/leaky-abstractions/videos" class="chrome-icon" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://youtube.com/@leakyabstractions" class="chrome-icon" aria-label="YouTube" title="YouTube" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                    <a href="{{ pathPrefix }}/feed.xml" class="chrome-icon" aria-label="RSS feed" title="RSS feed">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="6.18" cy="17.82" r="2.18"/><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/></svg>
+                    </a>
+                    <div style="position: relative;">
+                        <button class="theme-toggle" onclick="toggleThemePicker()" aria-label="Change theme">&#9881;</button>
+                        <div class="theme-picker" id="theme-picker"></div>
+                    </div>
                 </div>
             </div>
             <div class="terminal-body">
@@ -62,6 +74,26 @@
                 </div>
                 <div class="back-link">
                     <a href="{{ parentUrl }}">&larr; cd ..</a>
+                    {% if "_series/" in page.inputPath %}
+                    {% set seriesSlug = episodeSlug.split("/") | first %}
+                    {% for series in allSeriesData %}
+                    {% if series.slug == seriesSlug %}
+                    {% for ep in series.episodes %}
+                    {% if ep.slug == catSlug %}
+                    {% if loop.index0 > 0 %}
+                    {% set prevEp = series.episodes[loop.index0 - 1] %}
+                    <br><a href="{{ prevEp.url }}">&larr; cat {{ prevEp.slug }}.md</a>
+                    {% endif %}
+                    {% set nextIdx = loop.index0 + 1 %}
+                    {% if nextIdx < series.episodes.length %}
+                    {% set nextEp = series.episodes[nextIdx] %}
+                    <br><a href="{{ nextEp.url }}">&rarr; cat {{ nextEp.slug }}.md</a>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                 </div>
                 {% else %}
                 {{ content | safe }}

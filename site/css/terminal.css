@@ -60,7 +60,7 @@ a:hover {
 
 .terminal-chrome {
     background: var(--base02);
-    padding: 18px 24px;
+    padding: 6px 24px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -80,9 +80,15 @@ a:hover {
     border-radius: 50%;
 }
 
-.terminal-chrome .dot-red { background: #ff5f57; }
-.terminal-chrome .dot-yellow { background: #febc2e; }
-.terminal-chrome .dot-green { background: #28c840; }
+.terminal-chrome .dot-red {
+    background: #ff5f57;
+}
+.terminal-chrome .dot-yellow {
+    background: #febc2e;
+}
+.terminal-chrome .dot-green {
+    background: #28c840;
+}
 
 .terminal-chrome .title {
     color: var(--base05);
@@ -109,8 +115,21 @@ a:hover {
     margin: 0 2px;
 }
 
+.chrome-icon {
+    color: var(--base0D);
+    padding: 4px 8px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.chrome-icon:hover {
+    color: var(--base05);
+    background: var(--base02);
+    text-decoration: none;
+}
+
 .terminal-chrome .theme-toggle {
-    margin-left: auto;
     color: var(--base04);
     font-size: 1.3rem;
     cursor: pointer;
@@ -129,8 +148,13 @@ a:hover {
 }
 
 @keyframes pulse-theme {
-    0%, 100% { color: var(--base04); }
-    50% { color: var(--base0D); }
+    0%,
+    100% {
+        color: var(--base04);
+    }
+    50% {
+        color: var(--base0D);
+    }
 }
 
 .terminal-body {
@@ -162,14 +186,16 @@ a:hover {
     margin-bottom: 24px;
 }
 
-h1, .heading-lg {
+h1,
+.heading-lg {
     font-size: 1.7rem;
     font-weight: 700;
     color: var(--base07);
     margin-bottom: 6px;
 }
 
-h2, .heading-md {
+h2,
+.heading-md {
     font-size: 1.3rem;
     font-weight: 700;
     color: var(--base07);
@@ -214,6 +240,14 @@ h2, .heading-md {
     margin-bottom: 4px;
 }
 
+.post-title a {
+    text-decoration: none;
+}
+
+.post-title a:hover .link-text {
+    text-decoration: underline;
+}
+
 .post-meta {
     color: var(--base03);
     font-size: 0.85rem;
@@ -225,21 +259,34 @@ h2, .heading-md {
 
 .tag {
     background: var(--base02);
-    color: var(--base0E);
+    color: var(--base0C);
     font-size: 0.71rem;
     padding: 2px 6px;
     border-radius: 3px;
     margin-left: 6px;
 }
 
+.tag.tag-count {
+    color: var(--base0E);
+}
+
 .links {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     font-size: 0.85rem;
 }
 
 .links a {
     color: var(--base0C);
+}
+
+.links a {
+    text-decoration: none;
+}
+
+.links a:hover .link-text {
+    text-decoration: underline;
 }
 
 .symlink {
@@ -381,46 +428,72 @@ h2, .heading-md {
 }
 
 /* Prism.js syntax highlighting mapped to base16 theme variables */
-code[class*="language-"] .token.comment,
-code[class*="language-"] .token.prolog,
-code[class*="language-"] .token.doctype,
-code[class*="language-"] .token.cdata { color: var(--base03); }
+code[class*='language-'] .token.comment,
+code[class*='language-'] .token.prolog,
+code[class*='language-'] .token.doctype,
+code[class*='language-'] .token.cdata {
+    color: var(--base03);
+}
 
-code[class*="language-"] .token.punctuation { color: var(--base05); }
+code[class*='language-'] .token.punctuation {
+    color: var(--base05);
+}
 
-code[class*="language-"] .token.keyword,
-code[class*="language-"] .token.tag,
-code[class*="language-"] .token.boolean,
-code[class*="language-"] .token.important { color: var(--base0E); }
+code[class*='language-'] .token.keyword,
+code[class*='language-'] .token.tag,
+code[class*='language-'] .token.boolean,
+code[class*='language-'] .token.important {
+    color: var(--base0E);
+}
 
-code[class*="language-"] .token.function { color: var(--base0D); }
+code[class*='language-'] .token.function {
+    color: var(--base0D);
+}
 
-code[class*="language-"] .token.string,
-code[class*="language-"] .token.attr-value,
-code[class*="language-"] .token.char { color: var(--base0B); }
+code[class*='language-'] .token.string,
+code[class*='language-'] .token.attr-value,
+code[class*='language-'] .token.char {
+    color: var(--base0B);
+}
 
-code[class*="language-"] .token.number,
-code[class*="language-"] .token.constant,
-code[class*="language-"] .token.builtin { color: var(--base09); }
+code[class*='language-'] .token.number,
+code[class*='language-'] .token.constant,
+code[class*='language-'] .token.builtin {
+    color: var(--base09);
+}
 
-code[class*="language-"] .token.class-name,
-code[class*="language-"] .token.maybe-class-name { color: var(--base0A); }
+code[class*='language-'] .token.class-name,
+code[class*='language-'] .token.maybe-class-name {
+    color: var(--base0A);
+}
 
-code[class*="language-"] .token.regex,
-code[class*="language-"] .token.template-string,
-code[class*="language-"] .token.escape { color: var(--base0C); }
+code[class*='language-'] .token.regex,
+code[class*='language-'] .token.template-string,
+code[class*='language-'] .token.escape {
+    color: var(--base0C);
+}
 
-code[class*="language-"] .token.operator,
-code[class*="language-"] .token.property { color: var(--base08); }
+code[class*='language-'] .token.operator,
+code[class*='language-'] .token.property {
+    color: var(--base08);
+}
 
-code[class*="language-"] .token.attr-name,
-code[class*="language-"] .token.parameter,
-code[class*="language-"] .token.variable { color: var(--base08); }
+code[class*='language-'] .token.attr-name,
+code[class*='language-'] .token.parameter,
+code[class*='language-'] .token.variable {
+    color: var(--base08);
+}
 
-code[class*="language-"] .token.selector { color: var(--base0B); }
+code[class*='language-'] .token.selector {
+    color: var(--base0B);
+}
 
-code[class*="language-"] .token.deleted { color: var(--base08); }
-code[class*="language-"] .token.inserted { color: var(--base0B); }
+code[class*='language-'] .token.deleted {
+    color: var(--base08);
+}
+code[class*='language-'] .token.inserted {
+    color: var(--base0B);
+}
 
 .cmd-output {
     font-size: 0.85rem;
@@ -430,8 +503,12 @@ code[class*="language-"] .token.inserted { color: var(--base0B); }
     white-space: pre-wrap;
 }
 
-.cmd-output .ok { color: var(--base0B); }
-.cmd-output .err { color: var(--base08); }
+.cmd-output .ok {
+    color: var(--base0B);
+}
+.cmd-output .err {
+    color: var(--base08);
+}
 
 .theme-picker {
     display: none;

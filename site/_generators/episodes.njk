@@ -10,24 +10,27 @@ virtualPath: "~/episodes"
     {% for post in collections.standaloneEpisodes %}
     <div class="post">
         <div class="post-title">
-            <a href="{{ post.url }}">{{ post.data.title }}</a>
+            <a href="{{ post.url }}"><i class="fa-brands fa-markdown"></i> <span class="link-text">{{ post.data.title }}</span></a>
         </div>
         <div class="post-meta">
-            <span class="date">{{ post.date | date }}</span> — {{ post.data.summary }}
+            <span class="date">{{ post.date | date }}</span> — {{ post.data.summary }}{% for tag in post.data.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
         </div>
     </div>
     {% endfor %}
     {% for series in allSeriesData %}
     <div class="post series">
         <div class="post-title">
-            <a href="{{ pathPrefix }}/episodes/{{ series.slug }}/">{{ series.slug }}/</a>
+            <a href="{{ pathPrefix }}/episodes/{{ series.slug }}/"><i class="fa-solid fa-folder"></i> <span class="link-text">{{ series.slug }}/</span></a>
         </div>
         <div class="post-meta">
-            {{ series.episodes.length }} episode{% if series.episodes.length != 1 %}s{% endif %}
+            {% if series.episodes.length %}<span class="date">{{ series.episodes[series.episodes.length - 1].date }}</span> — {% endif %}{{ series.description }} <span class="tag tag-count">{{ series.episodes.length }} episode{% if series.episodes.length != 1 %}s{% endif %}</span>
         </div>
     </div>
     {% endfor %}
     {% else %}
     <p>No episodes yet.</p>
     {% endif %}
+</div>
+<div class="back-link">
+    <a href="{{ pathPrefix }}/">&larr; cd ..</a>
 </div>
