@@ -1,4 +1,5 @@
 import syntaxHighlight from '@11ty/eleventy-plugin-syntaxhighlight';
+import pluginRss from '@11ty/eleventy-plugin-rss';
 import { dirname, basename } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import yaml from 'js-yaml';
@@ -259,6 +260,7 @@ function buildSeriesData() {
 
 export default function (eleventyConfig) {
     eleventyConfig.addPlugin(syntaxHighlight);
+    eleventyConfig.addPlugin(pluginRss);
 
     // Date formatting filter
     eleventyConfig.addFilter('date', (value, format) => {
