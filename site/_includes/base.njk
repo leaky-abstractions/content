@@ -7,6 +7,14 @@
         {% if summary %}
         <meta name="description" content="{{ summary }}" />
         {% endif %}
+        <meta property="og:title" content="{{ title }}" />
+        <meta property="og:site_name" content="Leaky Abstractions" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://leaky-abstractions.dev{{ page.url }}" />
+        {% if summary %}<meta property="og:description" content="{{ summary }}" />{% endif %}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="{{ title }}" />
+        {% if summary %}<meta name="twitter:description" content="{{ summary }}" />{% endif %}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
