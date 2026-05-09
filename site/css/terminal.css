@@ -624,6 +624,17 @@ a.ls-entry:hover .link-text {
     color: var(--base05);
 }
 
+@media (max-width: 600px) {
+    .search-trigger {
+        border: none;
+        padding: 4px 8px;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+}
+
 @media (min-width: 601px) {
     .search-shortcut {
         display: inline;
@@ -641,7 +652,7 @@ a.ls-entry:hover .link-text {
     z-index: 100;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 12.5%;
+    padding-top: 7.5%;
 }
 
 .search-overlay.open {
@@ -652,8 +663,8 @@ a.ls-entry:hover .link-text {
     background: var(--base00);
     border: 1px solid var(--base02);
     border-radius: 8px;
-    width: 75%;
-    max-height: 75%;
+    width: 85%;
+    max-height: 85%;
     overflow-y: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
@@ -819,7 +830,7 @@ a.ls-entry:hover .link-text {
     }
 
     .terminal-chrome {
-        padding: 12px 16px;
+        padding: 6px 12px;
         gap: 8px;
         position: sticky;
         top: 0;

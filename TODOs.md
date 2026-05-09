@@ -14,3 +14,4 @@ Polish:
 - [x] System theme detection — auto-pick a light/dark base16 theme based on prefers-color-scheme on first visit
 - [ ] Reading progress — subtle bar at the top of the terminal chrome on long posts
 - [ ] Mobile swipe — swipe left/right for next/prev episode in a series
+- [ ] Collapse the icon row on the top right on mobile to have more space for the breadcrumbs

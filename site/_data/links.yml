@@ -16,3 +16,6 @@
   url: https://youtube.com/@leakyabstractions
   external: true
   icon: fa-brands fa-youtube
+- name: feed
+  url: /feed.xml
+  icon: fa-solid fa-rss
