@@ -448,6 +448,23 @@ export default function (eleventyConfig) {
                 return undefined;
             }
         },
+        seriesProgress(data) {
+            const inputPath = data.page?.inputPath;
+            if (!inputPath || !inputPath.includes('_series/') || !inputPath.includes('blog.md')) {
+                return undefined;
+            }
+            const epSlug = basename(dirname(inputPath));
+            const seriesSlug = basename(dirname(dirname(inputPath)));
+            const series = seriesData.find((s) => s.slug === seriesSlug);
+            if (!series) return undefined;
+            const idx = series.episodes.findIndex((e) => e.slug === epSlug);
+            if (idx === -1) return undefined;
+            return {
+                seriesSlug,
+                index: idx + 1,
+                total: series.episodes.length,
+            };
+        },
     });
 
     // Expose path prefix to templates

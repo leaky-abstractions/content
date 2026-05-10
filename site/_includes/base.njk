@@ -88,8 +88,11 @@
                 {% set parentUrl = vDir | replace("~", "") | default("/") %}
                 {% if parentUrl != "/" %}{% set parentUrl = parentUrl + "/" %}{% endif %}
                 {% set parentUrl = pathPrefix + parentUrl %}
-                {% from "macros.njk" import catSection %}
-                {% call catSection(vDir, catSlug + '.md', { pagefind: true, body: 'post-content' }) %}{{ content | safe }}{% endcall %}
+                {% from "macros.njk" import catSection, frontmatterBlock %}
+                {% call catSection(vDir, catSlug + '.md', { pagefind: true, body: 'post-content' }) -%}
+                {{ frontmatterBlock(date=page.date | date, readingTime=readingTime, tags=tags, series=seriesProgress) }}
+                {{ content | safe }}
+                {%- endcall %}
                 <div class="back-link">
                     <a href="{{ parentUrl }}">&larr; ls -lt</a>
                     {% if "_series/" in page.inputPath %}

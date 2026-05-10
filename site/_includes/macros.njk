@@ -33,3 +33,36 @@
     <a href="{{ url }}">&larr; {{ label }}</a>
 </div>
 {% endmacro %}
+
+{# Render a YAML-frontmatter-style metadata block at the top of a post body.
+   Designed to look like the file's actual frontmatter that `cat` would output.
+   Each value reuses the existing color/badge vocabulary (.date, .reading-time,
+   .tag, .tag.tag-count) so metadata reads consistently across the site.
+
+   Args:
+     date           yyyy-mm-dd string                    (optional)
+     readingTime    integer minutes                      (optional)
+     tags           array of strings                     (optional, omitted if empty)
+     series         object { seriesSlug, index, total }  (optional)
+                    Renders as two rows: `series:` (slug as badge) and
+                    `episode:` (N of M, magenta accent text).
+#}
+{% macro frontmatterBlock(date=null, readingTime=null, tags=[], series=null) %}
+<div class="frontmatter">
+    <div class="fm-delim">---</div>
+    {%- if date %}
+    <div class="fm-row"><span class="fm-key">date:</span><span class="date">{{ date }}</span></div>
+    {%- endif %}
+    {%- if readingTime %}
+    <div class="fm-row"><span class="fm-key">reading-time:</span><span class="reading-time">{{ readingTime }} min</span></div>
+    {%- endif %}
+    {%- if tags and tags.length %}
+    <div class="fm-row"><span class="fm-key">tags:</span><span class="fm-tags">{% for tag in tags %}<span class="tag">{{ tag }}</span>{% endfor %}</span></div>
+    {%- endif %}
+    {%- if series %}
+    <div class="fm-row"><span class="fm-key">series:</span><span class="fm-series"><span class="tag">{{ series.seriesSlug }}</span></span></div>
+    <div class="fm-row"><span class="fm-key">episode:</span><span class="fm-episode">{{ series.index }} of {{ series.total }}</span></div>
+    {%- endif %}
+    <div class="fm-delim">---</div>
+</div>
+{% endmacro %}
