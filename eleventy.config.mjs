@@ -298,7 +298,6 @@ export default function (eleventyConfig) {
     eleventyConfig.addGlobalData('layout', 'base.njk');
 
     // Copy static files to output
-    eleventyConfig.addPassthroughCopy('llms.txt');
     eleventyConfig.addPassthroughCopy({ 'site/css': 'css' });
     eleventyConfig.addPassthroughCopy({ 'site/js': 'js' });
 
@@ -407,16 +406,6 @@ export default function (eleventyConfig) {
             if (!permalink) return '~';
             return urlToVirtualPath(permalink, filetree);
         },
-    });
-
-    // Inject llms.txt script block via transform
-    eleventyConfig.addTransform('llmsTxt', function (content) {
-        if (!this.page.outputPath?.endsWith('.html')) return content;
-        const { data } = matter(readFileSync(this.page.inputPath, 'utf8'));
-        if (!data.summary) return content;
-
-        const script = '<script type="text/llms.txt">' + data.summary + '</script>';
-        return content.replace('</head>', script + '\n</head>');
     });
 
     // Expose path prefix to templates
