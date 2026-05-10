@@ -473,7 +473,7 @@
                 if (currentUrl === targetUrl) {
                     var contentEl = document.querySelector('.post-content') || document.querySelector('.welcome');
                     if (contentEl) {
-                        showHtmlOutput(contentEl.innerHTML);
+                        showHtmlOutput(contentEl.innerHTML, contentEl.className);
                         input.value = '';
                         return;
                     }
@@ -645,10 +645,10 @@
         insertOutput(buildPromptLine(cmdText), resultDiv);
     }
 
-    function showHtmlOutput(sourceHtml) {
+    function showHtmlOutput(sourceHtml, className) {
         // sourceHtml comes from the page's own rendered content, not user input
         var resultDiv = document.createElement('div');
-        resultDiv.className = 'post-content';
+        resultDiv.className = className || 'post-content';
         var template = document.createElement('template');
         template.innerHTML = sourceHtml;
         resultDiv.appendChild(template.content.cloneNode(true));
