@@ -9,6 +9,26 @@ import fg from 'fast-glob';
 
 const md = markdownIt({ html: true, linkify: true });
 
+// Compute estimated reading time for a markdown body.
+// Prose at 200 WPM (technical content), code at 100 WPM (read ~2x slower).
+// Rounds up to whole minutes; floor at 1.
+function computeReadingTime(markdown) {
+    const PROSE_WPM = 200;
+    const CODE_WPM = 100;
+
+    let codeText = '';
+    const proseText = markdown.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) => {
+        codeText += ' ' + code;
+        return '';
+    });
+
+    const proseWords = proseText.split(/\s+/).filter(Boolean).length;
+    const codeWords = codeText.split(/\s+/).filter(Boolean).length;
+
+    const minutes = proseWords / PROSE_WPM + codeWords / CODE_WPM;
+    return Math.max(1, Math.ceil(minutes));
+}
+
 // Path prefix for GitHub Pages subdirectory deployment
 // Set via ELEVENTY_PATH_PREFIX env var, defaults to '/' for local dev
 const PATH_PREFIX = (process.env.ELEVENTY_PATH_PREFIX || '').replace(/\/$/, '');
@@ -48,7 +68,7 @@ function buildFiletree() {
         if (!existsSync(blogPath)) continue;
 
         const meta = yaml.load(readFileSync(metaFile, 'utf8'));
-        const { data: blogFm } = matter(readFileSync(blogPath, 'utf8'));
+        const { data: blogFm, content: blogBody } = matter(readFileSync(blogPath, 'utf8'));
         episodesChildren[slug + '.md'] = {
             type: 'file',
             url: '/episodes/' + slug + '/',
@@ -56,6 +76,7 @@ function buildFiletree() {
             title: meta.title || slug,
             summary: blogFm.summary || '',
             tags: blogFm.tags || [],
+            readingTime: computeReadingTime(blogBody),
         };
     }
 
@@ -83,7 +104,7 @@ function buildFiletree() {
             if (!existsSync(blogPath)) continue;
 
             const epMeta = yaml.load(readFileSync(epMetaFile, 'utf8'));
-            const { data: epBlogFm } = matter(readFileSync(blogPath, 'utf8'));
+            const { data: epBlogFm, content: epBlogBody } = matter(readFileSync(blogPath, 'utf8'));
             seriesChildren[epSlug + '.md'] = {
                 type: 'file',
                 url: '/episodes/' + slug + '/' + epSlug + '/',
@@ -91,6 +112,7 @@ function buildFiletree() {
                 title: epMeta.title || epSlug,
                 summary: epBlogFm.summary || '',
                 tags: epBlogFm.tags || [],
+                readingTime: computeReadingTime(epBlogBody),
             };
         }
 
@@ -213,6 +235,7 @@ function buildContentDirData() {
                     tags: fm.tags || [],
                     content: body,
                     url: prefixUrl('/' + dirName + '/' + slug + '/'),
+                    readingTime: computeReadingTime(body),
                 };
             });
 
@@ -265,7 +288,7 @@ function buildSeriesData() {
             if (!existsSync(blogPath)) continue;
 
             const epMeta = yaml.load(readFileSync(epMetaFile, 'utf8'));
-            const { data: blogData } = matter(readFileSync(blogPath, 'utf8'));
+            const { data: blogData, content: blogBody } = matter(readFileSync(blogPath, 'utf8'));
             episodes.push({
                 slug: epSlug,
                 title: epMeta.title,
@@ -274,11 +297,19 @@ function buildSeriesData() {
                 summary: blogData.summary || '',
                 tags: blogData.tags || [],
                 url: prefixUrl('/episodes/' + slug + '/' + epSlug + '/'),
+                readingTime: computeReadingTime(blogBody),
             });
         }
         episodes.sort((a, b) => a.episode - b.episode);
 
-        return { slug, title: meta.title, description: meta.description || '', readme, episodes };
+        return {
+            slug,
+            title: meta.title,
+            description: meta.description || '',
+            readme,
+            episodes,
+            url: prefixUrl('/episodes/' + slug + '/'),
+        };
     });
 }
 
@@ -407,6 +438,15 @@ export default function (eleventyConfig) {
             const permalink = data.permalink || data.page?.url;
             if (!permalink) return '~';
             return urlToVirtualPath(permalink, filetree);
+        },
+        readingTime(data) {
+            if (!data.page?.inputPath?.includes('blog.md')) return undefined;
+            try {
+                const { content } = matter(readFileSync(data.page.inputPath, 'utf8'));
+                return computeReadingTime(content);
+            } catch (e) {
+                return undefined;
+            }
         },
     });
 

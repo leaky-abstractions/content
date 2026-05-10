@@ -9,27 +9,25 @@ eleventyComputed:
     title: "{{ listing.dirName }}"
     virtualPath: "~/{{ listing.dirName }}"
 ---
+{% from "post-card.njk" import postCard %}
+{% from "macros.njk" import catSection, backLink %}
 
 {% if listing.readme | length %}
-<div class="section">
-    <div class="prompt"><span class="path">~/{{ listing.dirName }}</span> <span class="dollar">$</span> cat README.md</div>
-    <div class="welcome">{{ listing.readme | md | safe }}</div>
-</div>
+{% call catSection('~/' + listing.dirName, 'README.md') %}{{ listing.readme | md | safe }}{% endcall %}
 {% endif %}
 
 <div class="section">
     <div class="prompt"><span class="path">~/{{ listing.dirName }}</span> <span class="dollar">$</span> ls -lt</div>
     {% for page in listing.pages %}
-    <div class="post">
-        <div class="post-title">
-            <a href="{{ page.url }}"><i class="fa-brands fa-markdown"></i> <span class="link-text">{{ page.title }}</span></a>
-        </div>
-        <div class="post-meta">
-            {% if page.date %}<span class="date">{{ page.date }}</span>{% if page.summary %} — {% endif %}{% endif %}{{ page.summary }}{% for tag in page.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
-        </div>
-    </div>
+    {{ postCard({
+        kind: 'post',
+        url: page.url,
+        title: page.title,
+        date: page.date,
+        readingTime: page.readingTime,
+        summary: page.summary,
+        tags: page.tags
+    }) }}
     {% endfor %}
 </div>
-<div class="back-link">
-    <a href="{{ pathPrefix }}/">&larr; cd ..</a>
-</div>
+{{ backLink(pathPrefix + '/') }}

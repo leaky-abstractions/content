@@ -1,0 +1,35 @@
+{# Layout primitives. Importing macros here keeps section/back-link rendering
+   in one place; if the prompt format or back-link wording changes, edit only
+   this file. #}
+
+{# Render a "fake terminal" cat <file>.md section.
+   Use {% call catSection(...) %}body markdown here{% endcall %}.
+
+   Args:
+     path     virtual path shown before the prompt (e.g. "~", "~/episodes/foo")
+     file     filename shown after `cat ` (e.g. "welcome.md", "intro.md")
+     options  optional object:
+                pagefind  if true, marks section for Pagefind indexing
+                          and excludes the prompt line from the index
+                body      class for the body div (default: "welcome").
+                          Use "post-content" for full episode/page bodies.
+#}
+{% macro catSection(path, file, options={}) %}
+<div class="section"{% if options.pagefind %} data-pagefind-body{% endif %}>
+    <div class="prompt"{% if options.pagefind %} data-pagefind-ignore{% endif %}><span class="path">{{ path }}</span> <span class="dollar">$</span> cat {{ file }}</div>
+    <div class="{{ options.body or 'welcome' }}">
+        {{ caller() }}
+    </div>
+</div>
+{% endmacro %}
+
+{# Render the bottom-of-page "back" navigation link.
+   Args:
+     url    href to navigate to (already path-prefixed)
+     label  link text (default: "cd ..")
+#}
+{% macro backLink(url, label='cd ..') %}
+<div class="back-link">
+    <a href="{{ url }}">&larr; {{ label }}</a>
+</div>
+{% endmacro %}

@@ -276,6 +276,10 @@ h2,
     color: var(--base0B);
 }
 
+.post-meta .reading-time {
+    color: var(--base0D);
+}
+
 .tag {
     background: var(--base02);
     color: var(--base0C);

@@ -107,6 +107,7 @@
         return el;
     }
 
+    // Mirrors site/_includes/post-card.njk — keep field order and markup in sync.
     function makePostCard(name, child) {
         var isSeries = child.type === 'dir' && child.title;
         var post = document.createElement('div');
@@ -139,9 +140,17 @@
             metaDiv.appendChild(dateSpan);
         }
 
+        if (child.readingTime) {
+            if (child.date) metaDiv.appendChild(document.createTextNode(' · '));
+            var rtSpan = document.createElement('span');
+            rtSpan.className = 'reading-time';
+            rtSpan.textContent = child.readingTime + ' min read';
+            metaDiv.appendChild(rtSpan);
+        }
+
         var desc = isSeries ? child.description : child.summary;
         if (desc) {
-            if (child.date) metaDiv.appendChild(document.createTextNode(' — '));
+            if (child.date || child.readingTime) metaDiv.appendChild(document.createTextNode(' — '));
             metaDiv.appendChild(document.createTextNode(desc));
         }
 

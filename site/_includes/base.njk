@@ -88,14 +88,10 @@
                 {% set parentUrl = vDir | replace("~", "") | default("/") %}
                 {% if parentUrl != "/" %}{% set parentUrl = parentUrl + "/" %}{% endif %}
                 {% set parentUrl = pathPrefix + parentUrl %}
-                <div class="section" data-pagefind-body>
-                    <div class="prompt" data-pagefind-ignore><span class="path">{{ vDir }}</span> <span class="dollar">$</span> cat {{ catSlug }}.md</div>
-                    <div class="post-content">
-                        {{ content | safe }}
-                    </div>
-                </div>
+                {% from "macros.njk" import catSection %}
+                {% call catSection(vDir, catSlug + '.md', { pagefind: true, body: 'post-content' }) %}{{ content | safe }}{% endcall %}
                 <div class="back-link">
-                    <a href="{{ parentUrl }}">&larr; cd ..</a>
+                    <a href="{{ parentUrl }}">&larr; ls -lt</a>
                     {% if "_series/" in page.inputPath %}
                     {% set seriesSlug = episodeSlug.split("/") | first %}
                     {% for series in allSeriesData %}

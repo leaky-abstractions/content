@@ -1,0 +1,30 @@
+{# Post card — single source of truth for episode/series listings.
+   Used by index.njk, episodes.njk, series-page.njk, content-listing.njk.
+   The interactive `ls` command renders the same shape via site/js/shell.js
+   makePostCard() — keep them in sync if the markup changes.
+
+   Expected fields on `item`:
+     kind         'post' (default) | 'series'
+     url          required — link target (already path-prefixed)
+     title        required — display text
+     date         optional — yyyy-mm-dd string
+     readingTime  optional — integer minutes
+     summary      optional — description text
+     tags         optional — array of strings
+     episodeCount optional — for series rows; renders "N episodes" badge
+#}
+{% macro postCard(item) %}
+<div class="post{% if item.kind == 'series' %} series{% endif %}">
+    <div class="post-title">
+        <a href="{{ item.url }}"><i class="{% if item.kind == 'series' %}fa-solid fa-folder{% else %}fa-brands fa-markdown{% endif %}"></i> <span class="link-text">{{ item.title }}</span></a>
+    </div>
+    <div class="post-meta">
+        {%- if item.date %}<span class="date">{{ item.date }}</span>{% endif -%}
+        {%- if item.readingTime %}{% if item.date %} · {% endif %}<span class="reading-time">{{ item.readingTime }} min read</span>{% endif -%}
+        {%- if item.summary and (item.date or item.readingTime) %} — {% endif -%}
+        {{- item.summary -}}
+        {%- for tag in item.tags %}<span class="tag">{{ tag }}</span>{% endfor -%}
+        {%- if item.episodeCount %} <span class="tag tag-count">{{ item.episodeCount }} episode{% if item.episodeCount != 1 %}s{% endif %}</span>{% endif -%}
+    </div>
+</div>
+{% endmacro %}

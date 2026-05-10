@@ -3,6 +3,7 @@ title: "404"
 permalink: /404.html
 virtualPath: "~"
 ---
+{% from "macros.njk" import backLink %}
 
 <div class="section">
     <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> cd <span id="not-found-path"></span></div>
@@ -18,9 +19,7 @@ virtualPath: "~"
     help            show available commands</span></div>
 </div>
 
-<div class="back-link">
-    <a href="{{ pathPrefix }}/">&larr; cd ~</a>
-</div>
+{{ backLink(pathPrefix + '/', 'cd ~') }}
 
 <script>
     (function() {

@@ -3,34 +3,35 @@ title: Episodes
 permalink: /episodes/index.html
 virtualPath: "~/episodes"
 ---
+{% from "post-card.njk" import postCard %}
+{% from "macros.njk" import backLink %}
 
 <div class="section">
     <div class="prompt"><span class="path">~/episodes</span> <span class="dollar">$</span> ls -lt</div>
     {% if collections.standaloneEpisodes.length or allSeriesData.length %}
     {% for post in collections.standaloneEpisodes %}
-    <div class="post">
-        <div class="post-title">
-            <a href="{{ post.url }}"><i class="fa-brands fa-markdown"></i> <span class="link-text">{{ post.data.title }}</span></a>
-        </div>
-        <div class="post-meta">
-            <span class="date">{{ post.date | date }}</span> — {{ post.data.summary }}{% for tag in post.data.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
-        </div>
-    </div>
+    {{ postCard({
+        kind: 'post',
+        url: post.url,
+        title: post.data.title,
+        date: post.date | date,
+        readingTime: post.data.readingTime,
+        summary: post.data.summary,
+        tags: post.data.tags
+    }) }}
     {% endfor %}
     {% for series in allSeriesData %}
-    <div class="post series">
-        <div class="post-title">
-            <a href="{{ pathPrefix }}/episodes/{{ series.slug }}/"><i class="fa-solid fa-folder"></i> <span class="link-text">{{ series.slug }}/</span></a>
-        </div>
-        <div class="post-meta">
-            {% if series.episodes.length %}<span class="date">{{ series.episodes[series.episodes.length - 1].date }}</span> — {% endif %}{{ series.description }} <span class="tag tag-count">{{ series.episodes.length }} episode{% if series.episodes.length != 1 %}s{% endif %}</span>
-        </div>
-    </div>
+    {{ postCard({
+        kind: 'series',
+        url: series.url,
+        title: series.slug + '/',
+        date: series.episodes[series.episodes.length - 1].date if series.episodes.length else null,
+        summary: series.description,
+        episodeCount: series.episodes.length
+    }) }}
     {% endfor %}
     {% else %}
     <p>No episodes yet.</p>
     {% endif %}
 </div>
-<div class="back-link">
-    <a href="{{ pathPrefix }}/">&larr; cd ..</a>
-</div>
+{{ backLink(pathPrefix + '/') }}

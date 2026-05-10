@@ -9,13 +9,7 @@ eleventyComputed:
     title: "{{ contentPage.title }}"
     virtualPath: "~/{{ contentPage.dirName }}/{{ contentPage.slug }}.md"
 ---
+{% from "macros.njk" import catSection, backLink %}
 
-<div class="section" data-pagefind-body>
-    <div class="prompt" data-pagefind-ignore><span class="path">~/{{ contentPage.dirName }}</span> <span class="dollar">$</span> cat {{ contentPage.slug }}.md</div>
-    <div class="post-content">
-        {{ contentPage.content | md | safe }}
-    </div>
-</div>
-<div class="back-link">
-    <a href="{{ pathPrefix }}/{{ contentPage.dirName }}/">&larr; cd ..</a>
-</div>
+{% call catSection('~/' + contentPage.dirName, contentPage.slug + '.md', { pagefind: true, body: 'post-content' }) %}{{ contentPage.content | md | safe }}{% endcall %}
+{{ backLink(pathPrefix + '/' + contentPage.dirName + '/', 'ls -lt') }}
