@@ -101,26 +101,33 @@ function buildFiletree() {
             seriesChildren['README.md'] = { type: 'file', url: '/episodes/' + slug + '/' };
         }
 
-        // Series episodes
+        // Collect series episodes (skipping any without blog.md), sort by
+        // episode number so we can attach a stable "N of M" position.
+        const epEntries = [];
         const episodeMetaFiles = fg.sync(seriesDir + '/*/meta.yml');
         for (const epMetaFile of episodeMetaFiles) {
             const epDir = dirname(epMetaFile);
-            const epSlug = basename(epDir);
             const blogPath = epDir + '/blog.md';
             if (!existsSync(blogPath)) continue;
-
+            const epSlug = basename(epDir);
             const epMeta = yaml.load(readFileSync(epMetaFile, 'utf8'));
             const { data: epBlogFm, content: epBlogBody } = matter(readFileSync(blogPath, 'utf8'));
-            seriesChildren[epSlug + '.md'] = {
-                type: 'file',
-                url: '/episodes/' + slug + '/' + epSlug + '/',
-                date: epMeta.date || null,
-                title: epMeta.title || epSlug,
-                summary: epBlogFm.summary || '',
-                tags: epBlogFm.tags || [],
-                readingTime: computeReadingTime(epBlogBody),
-            };
+            epEntries.push({ epSlug, epMeta, epBlogFm, epBlogBody });
         }
+        epEntries.sort((a, b) => (a.epMeta.episode || 0) - (b.epMeta.episode || 0));
+        const epTotal = epEntries.length;
+        epEntries.forEach((entry, i) => {
+            seriesChildren[entry.epSlug + '.md'] = {
+                type: 'file',
+                url: '/episodes/' + slug + '/' + entry.epSlug + '/',
+                date: entry.epMeta.date || null,
+                title: entry.epMeta.title || entry.epSlug,
+                summary: entry.epBlogFm.summary || '',
+                tags: entry.epBlogFm.tags || [],
+                readingTime: computeReadingTime(entry.epBlogBody),
+                seriesPosition: (i + 1) + ' of ' + epTotal,
+            };
+        });
 
         // Find latest episode date
         const epDates = Object.values(seriesChildren).map(function (c) { return c.date || ''; }).sort();
@@ -131,7 +138,7 @@ function buildFiletree() {
             title: seriesMeta.title || slug,
             description: seriesMeta.description || '',
             date: epDates[epDates.length - 1] || null,
-            episodeCount: Object.values(seriesChildren).filter(function (c) { return c.type === 'file' && c.url; }).length,
+            episodeCount: epTotal,
         };
     }
 
@@ -480,8 +487,16 @@ export default function (eleventyConfig) {
     const seriesData = buildSeriesData();
     eleventyConfig.addGlobalData('allSeriesData', seriesData);
 
-    // Related episodes — pre-computed once, looked up by inputPath at render time.
-    const relatedByInputPath = buildRelatedByInputPath(buildAllEpisodesData(seriesData));
+    // All episodes flat + related lookup — both derive from the same source.
+    const allEpisodes = buildAllEpisodesData(seriesData);
+    const relatedByInputPath = buildRelatedByInputPath(allEpisodes);
+
+    // Latest 5 episodes (newest first) — exposed for the home page listing.
+    const latestEpisodes = allEpisodes
+        .slice()
+        .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+        .slice(0, 5);
+    eleventyConfig.addGlobalData('latestEpisodes', latestEpisodes);
 
     // Content directory pages (legal/, etc.)
     const contentDirData = buildContentDirData();

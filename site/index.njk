@@ -10,32 +10,24 @@ virtualPath: "~"
 {% call catSection('~', 'welcome.md') %}{{ welcome | md | safe }}{% endcall %}
 
 <div class="section">
-    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls -lt episodes/</div>
-    {% for post in collections.standaloneEpisodes %}
+    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls -t episodes/**/[0-9]*.md | head -5 <span class="prompt-comment"># latest episodes</span></div>
+    {% for ep in latestEpisodes %}
     {{ postCard({
         kind: 'post',
-        url: post.url,
-        title: post.data.title,
-        date: post.date | date,
-        readingTime: post.data.readingTime,
-        summary: post.data.summary,
-        tags: post.data.tags
-    }) }}
-    {% endfor %}
-    {% for series in allSeriesData %}
-    {{ postCard({
-        kind: 'series',
-        url: series.url,
-        title: series.slug + '/',
-        date: series.episodes[series.episodes.length - 1].date if series.episodes.length else null,
-        summary: series.description,
-        episodeCount: series.episodes.length
+        url: ep.url,
+        title: ep.title,
+        pathPrefix: ep.seriesSlug + '/' if ep.seriesSlug else null,
+        date: ep.date,
+        readingTime: ep.readingTime,
+        summary: ep.summary,
+        tags: ep.tags,
+        seriesPosition: ep.seriesPosition
     }) }}
     {% endfor %}
 </div>
 
 <div class="section">
-    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls links/</div>
+    <div class="prompt"><span class="path">~</span> <span class="dollar">$</span> ls links/ <span class="prompt-comment"># quick links</span></div>
     <div class="ls-output">
         {% for link in links %}
         <a href="{{ link.url }}" class="ls-entry ls-type-{{ link.type | default('file') }}{% if link.external %} ls-external{% endif %}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>{% if link.icon %}<i class="{{ link.icon }}"></i> {% endif %}<span class="link-text">{{ link.name }}</span></a>

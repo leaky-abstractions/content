@@ -7,6 +7,8 @@
      kind            'post' (default) | 'series'
      url             required — link target (already path-prefixed)
      title           required — display text
+     pathPrefix      optional — muted directory prefix shown before title
+                     (e.g. "firmament/" for series episodes in flat listings)
      date            optional — yyyy-mm-dd string
      readingTime     optional — integer minutes
      summary         optional — description text
@@ -17,16 +19,22 @@
 {% macro postCard(item) %}
 <div class="post{% if item.kind == 'series' %} series{% endif %}">
     <div class="post-title">
-        <a href="{{ item.url }}"><i class="{% if item.kind == 'series' %}fa-solid fa-folder{% else %}fa-brands fa-markdown{% endif %}"></i> <span class="link-text">{{ item.title }}</span></a>
+        <a href="{{ item.url }}"><i class="{% if item.kind == 'series' %}fa-solid fa-folder{% else %}fa-brands fa-markdown{% endif %}"></i> {% if item.pathPrefix %}<span class="path-prefix">{{ item.pathPrefix }}</span>{% endif %}<span class="link-text">{{ item.title }}</span></a>
     </div>
+    {%- if item.date or item.readingTime or item.summary %}
     <div class="post-meta">
         {%- if item.date %}<span class="date">{{ item.date }}</span>{% endif -%}
         {%- if item.readingTime %}{% if item.date %} · {% endif %}<span class="reading-time">{{ item.readingTime }} min read</span>{% endif -%}
         {%- if item.summary and (item.date or item.readingTime) %} — {% endif -%}
         {{- item.summary -}}
+    </div>
+    {%- endif %}
+    {%- if (item.tags and item.tags.length) or item.seriesPosition or item.episodeCount %}
+    <div class="post-tags">
         {%- for tag in item.tags %}<span class="tag">{{ tag }}</span>{% endfor -%}
         {%- if item.seriesPosition %}<span class="tag tag-count">{{ item.seriesPosition }}</span>{% endif -%}
-        {%- if item.episodeCount %} <span class="tag tag-count">{{ item.episodeCount }} episode{% if item.episodeCount != 1 %}s{% endif %}</span>{% endif -%}
+        {%- if item.episodeCount %}<span class="tag tag-count">{{ item.episodeCount }} episode{% if item.episodeCount != 1 %}s{% endif %}</span>{% endif -%}
     </div>
+    {%- endif %}
 </div>
 {% endmacro %}

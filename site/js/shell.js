@@ -113,65 +113,80 @@
         var post = document.createElement('div');
         post.className = 'post' + (isSeries ? ' series' : '');
 
+        // Title
         var titleDiv = document.createElement('div');
         titleDiv.className = 'post-title';
         var link = document.createElement('a');
         link.href = child.url;
-
         var icon = document.createElement('i');
         icon.className = getIcon(child, name);
         link.appendChild(icon);
         link.appendChild(document.createTextNode(' '));
-
         var text = document.createElement('span');
         text.className = 'link-text';
-        text.textContent = child.title || name;
+        // Series rows show the slug-as-path (e.g. "firmament/"); episode rows
+        // show their friendly title. Mirrors postCard call sites where series
+        // pass `title: series.slug + '/'`.
+        text.textContent = isSeries ? (name + '/') : (child.title || name);
         link.appendChild(text);
         titleDiv.appendChild(link);
         post.appendChild(titleDiv);
 
-        var metaDiv = document.createElement('div');
-        metaDiv.className = 'post-meta';
-
-        if (child.date) {
-            var dateSpan = document.createElement('span');
-            dateSpan.className = 'date';
-            dateSpan.textContent = child.date;
-            metaDiv.appendChild(dateSpan);
-        }
-
-        if (child.readingTime) {
-            if (child.date) metaDiv.appendChild(document.createTextNode(' · '));
-            var rtSpan = document.createElement('span');
-            rtSpan.className = 'reading-time';
-            rtSpan.textContent = child.readingTime + ' min read';
-            metaDiv.appendChild(rtSpan);
-        }
-
+        // Meta line (date · reading-time — description)
         var desc = isSeries ? child.description : child.summary;
-        if (desc) {
-            if (child.date || child.readingTime) metaDiv.appendChild(document.createTextNode(' — '));
-            metaDiv.appendChild(document.createTextNode(desc));
+        if (child.date || child.readingTime || desc) {
+            var metaDiv = document.createElement('div');
+            metaDiv.className = 'post-meta';
+            if (child.date) {
+                var dateSpan = document.createElement('span');
+                dateSpan.className = 'date';
+                dateSpan.textContent = child.date;
+                metaDiv.appendChild(dateSpan);
+            }
+            if (child.readingTime) {
+                if (child.date) metaDiv.appendChild(document.createTextNode(' · '));
+                var rtSpan = document.createElement('span');
+                rtSpan.className = 'reading-time';
+                rtSpan.textContent = child.readingTime + ' min read';
+                metaDiv.appendChild(rtSpan);
+            }
+            if (desc) {
+                if (child.date || child.readingTime) metaDiv.appendChild(document.createTextNode(' — '));
+                metaDiv.appendChild(document.createTextNode(desc));
+            }
+            post.appendChild(metaDiv);
         }
 
-        if (child.tags && child.tags.length) {
-            child.tags.forEach(function (tag) {
-                var tagSpan = document.createElement('span');
-                tagSpan.className = 'tag';
-                tagSpan.textContent = tag;
-                metaDiv.appendChild(tagSpan);
-            });
+        // Tags row (content tags, then seriesPosition, then episodeCount)
+        var hasTags = child.tags && child.tags.length;
+        var hasPosition = !!child.seriesPosition;
+        var hasCount = isSeries && !!child.episodeCount;
+        if (hasTags || hasPosition || hasCount) {
+            var tagsDiv = document.createElement('div');
+            tagsDiv.className = 'post-tags';
+            if (hasTags) {
+                child.tags.forEach(function (tag) {
+                    var tagSpan = document.createElement('span');
+                    tagSpan.className = 'tag';
+                    tagSpan.textContent = tag;
+                    tagsDiv.appendChild(tagSpan);
+                });
+            }
+            if (hasPosition) {
+                var posSpan = document.createElement('span');
+                posSpan.className = 'tag tag-count';
+                posSpan.textContent = child.seriesPosition;
+                tagsDiv.appendChild(posSpan);
+            }
+            if (hasCount) {
+                var countSpan = document.createElement('span');
+                countSpan.className = 'tag tag-count';
+                countSpan.textContent = child.episodeCount + ' episode' + (child.episodeCount !== 1 ? 's' : '');
+                tagsDiv.appendChild(countSpan);
+            }
+            post.appendChild(tagsDiv);
         }
 
-        if (isSeries && child.episodeCount) {
-            if (desc) metaDiv.appendChild(document.createTextNode(' '));
-            var countSpan = document.createElement('span');
-            countSpan.className = 'tag tag-count';
-            countSpan.textContent = child.episodeCount + ' episode' + (child.episodeCount !== 1 ? 's' : '');
-            metaDiv.appendChild(countSpan);
-        }
-
-        post.appendChild(metaDiv);
         return post;
     }
 
