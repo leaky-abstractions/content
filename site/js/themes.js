@@ -30,7 +30,31 @@ function applyTheme(id) {
     localStorage.setItem('theme', JSON.stringify(palette));
     localStorage.setItem('theme-name', id);
     updatePickerActive(id);
+    updateFavicon();
     return true;
+}
+
+// Generate a {;} favicon using the current theme's --base0D (the site's
+// dominant blue — used by prompt $, reading-time, links, hover states).
+// Data-URI SVG so the favicon updates instantly on theme change without
+// any caching issues. System monospace fallback (no external fonts in
+// favicon SVGs due to browser security restrictions).
+function updateFavicon() {
+    var color = (getComputedStyle(document.documentElement).getPropertyValue('--base0D') || '').trim() || '#61afef';
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+        '<text x="16" y="24" text-anchor="middle" ' +
+        'font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" ' +
+        'font-size="22" font-weight="700" fill="' + color + '">{;}</text>' +
+        '</svg>';
+    var url = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    var link = document.querySelector('link[rel="icon"]');
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+    }
+    link.type = 'image/svg+xml';
+    link.href = url;
 }
 
 function getCurrentTheme() {
@@ -82,3 +106,7 @@ document.addEventListener('click', function(e) {
         if (toggle) toggle.classList.remove('theme-active');
     }
 });
+
+// Render favicon once on initial script load — picks up whatever --base0E
+// was set by the inline theme-loader in base.njk's <head>.
+updateFavicon();
