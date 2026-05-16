@@ -355,6 +355,25 @@ h2,
     margin-left: 0;
 }
 
+.frontmatter .fm-author .fm-author-link,
+.frontmatter .fm-author .fm-author-email {
+    color: var(--base0D);
+    text-decoration: none;
+}
+
+.frontmatter .fm-author .fm-author-link:hover .link-text,
+.frontmatter .fm-author .fm-author-email:hover .link-text {
+    text-decoration: underline;
+}
+
+.frontmatter .fm-author .fm-author-link i {
+    margin-right: 0.25em;
+}
+
+.frontmatter .fm-author .fm-author-email {
+    opacity: 0.85;
+}
+
 
 .post-content {
     color: var(--base05);

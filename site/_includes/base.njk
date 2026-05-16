@@ -17,6 +17,7 @@
         {% if summary %}<meta name="twitter:description" content="{{ summary }}" />{% endif %}
         <link rel="canonical" href="{{ siteUrl }}{{ page.url }}" />
         <link rel="icon" type="image/svg+xml" href="{{ pathPrefix }}/favicon.svg" />
+        {% if jsonLd %}<script type="application/ld+json">{{ jsonLd | dump | safe }}</script>{% endif %}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -88,7 +89,7 @@
                 {% from "macros.njk" import catSection, frontmatterBlock, backLink %}
                 {% from "post-card.njk" import postCard %}
                 {% call catSection(vDir, catSlug + '.md', { pagefind: true, body: 'post-content' }) -%}
-                {{ frontmatterBlock(date=page.date | date, readingTime=readingTime, tags=tags, series=seriesProgress) }}
+                {{ frontmatterBlock(date=page.date | date, readingTime=readingTime, tags=tags, series=seriesProgress, author=site.author) }}
                 {{ content | safe }}
                 {%- endcall %}
                 {% if seriesNav and (seriesNav.prev or seriesNav.next) %}

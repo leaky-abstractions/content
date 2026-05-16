@@ -29,6 +29,12 @@ function computeReadingTime(markdown) {
     return Math.max(1, Math.ceil(minutes));
 }
 
+// Total word count (prose + code) for a markdown body — used by JSON-LD.
+function computeWordCount(markdown) {
+    const text = markdown.replace(/```[\w]*\n?|```/g, '');
+    return text.split(/\s+/).filter(Boolean).length;
+}
+
 // Path prefix for GitHub Pages subdirectory deployment
 // Set via ELEVENTY_PATH_PREFIX env var, defaults to '/' for local dev
 const PATH_PREFIX = (process.env.ELEVENTY_PATH_PREFIX || '').replace(/\/$/, '');
@@ -534,6 +540,15 @@ export default function (eleventyConfig) {
                 return undefined;
             }
         },
+        wordCount(data) {
+            if (!data.page?.inputPath?.includes('blog.md')) return undefined;
+            try {
+                const { content } = matter(readFileSync(data.page.inputPath, 'utf8'));
+                return computeWordCount(content);
+            } catch (e) {
+                return undefined;
+            }
+        },
         seriesProgress(data) {
             const inputPath = data.page?.inputPath;
             if (!inputPath || !inputPath.includes('_series/') || !inputPath.includes('blog.md')) {
@@ -572,6 +587,81 @@ export default function (eleventyConfig) {
                 prev: idx > 0 ? series.episodes[idx - 1] : null,
                 next: idx < series.episodes.length - 1 ? series.episodes[idx + 1] : null,
             };
+        },
+        jsonLd(data) {
+            const site = data.site;
+            if (!site) return null;
+
+            // Strip our internal `icon` field — pure display, not Schema.org.
+            const { icon: _icon, ...authorBase } = site.author || {};
+            const author = { '@type': 'Person', ...authorBase };
+            const publisher = { '@type': 'Organization', ...(site.publisher || {}) };
+
+            const inputPath = data.page?.inputPath || '';
+            const pageUrl = site.url + (data.page?.url || '');
+
+            // Episode pages
+            if (inputPath.includes('episodes/') && inputPath.includes('blog.md')) {
+                const ld = {
+                    '@context': 'https://schema.org',
+                    '@type': 'BlogPosting',
+                    headline: data.title,
+                    description: data.summary || undefined,
+                    datePublished: data.page?.date ? new Date(data.page.date).toISOString().slice(0, 10) : undefined,
+                    url: pageUrl,
+                    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+                    inLanguage: 'en',
+                    author,
+                    publisher,
+                };
+                if (data.tags && data.tags.length) ld.keywords = data.tags;
+                if (data.readingTime) ld.timeRequired = 'PT' + data.readingTime + 'M';
+                if (data.wordCount) ld.wordCount = data.wordCount;
+                if (data.seriesProgress) {
+                    const series = seriesData.find((s) => s.slug === data.seriesProgress.seriesSlug);
+                    ld.isPartOf = {
+                        '@type': 'CreativeWorkSeries',
+                        name: series ? series.title : data.seriesProgress.seriesSlug,
+                        url: site.url + '/episodes/' + data.seriesProgress.seriesSlug + '/',
+                    };
+                }
+                return ld;
+            }
+
+            // Series pages (pagination over allSeriesData via series-page.njk)
+            if (inputPath.includes('series-page.njk') && data.seriesData) {
+                const s = data.seriesData;
+                return {
+                    '@context': 'https://schema.org',
+                    '@type': 'CreativeWorkSeries',
+                    name: s.title,
+                    description: s.description || undefined,
+                    url: site.url + '/episodes/' + s.slug + '/',
+                    inLanguage: 'en',
+                    publisher,
+                    hasPart: s.episodes.map((ep) => ({
+                        '@type': 'BlogPosting',
+                        headline: ep.title,
+                        url: site.url + '/episodes/' + s.slug + '/' + ep.slug + '/',
+                        datePublished: ep.date,
+                    })),
+                };
+            }
+
+            // Homepage
+            if (inputPath.endsWith('/index.njk') && data.virtualPath === '~') {
+                return {
+                    '@context': 'https://schema.org',
+                    '@type': 'WebSite',
+                    name: site.name,
+                    url: site.url,
+                    description: site.description || undefined,
+                    inLanguage: 'en',
+                    publisher,
+                };
+            }
+
+            return null;
         },
     });
 

@@ -46,10 +46,17 @@
      series         object { seriesSlug, index, total }  (optional)
                     Renders as one row: `series: [slug] [N of M]`
                     (cyan series tag + magenta position badge).
+     author         object { name, url, email, icon }  (optional)
+                    Renders as YAML-style author line:
+                    `author: [icon] name <email>` with name+icon linking
+                    to author.url and email as a mailto: link.
 #}
-{% macro frontmatterBlock(date=null, readingTime=null, tags=[], series=null) %}
+{% macro frontmatterBlock(date=null, readingTime=null, tags=[], series=null, author=null) %}
 <div class="frontmatter">
     <div class="fm-delim">---</div>
+    {%- if author %}
+    <div class="fm-row"><span class="fm-key">author:</span><span class="fm-author"><a href="{{ author.url }}" class="fm-author-link" rel="author"{% if author.url.startsWith('http') %} target="_blank" rel="noopener author"{% endif %}>{% if author.icon %}<i class="{{ author.icon }}"></i> {% endif %}<span class="link-text">{{ author.name }}</span></a>{% if author.email %} &lt;<a href="mailto:{{ author.email }}" class="fm-author-email"><span class="link-text">{{ author.email }}</span></a>&gt;{% endif %}</span></div>
+    {%- endif %}
     {%- if date %}
     <div class="fm-row"><span class="fm-key">date:</span><span class="date">{{ date }}</span></div>
     {%- endif %}
