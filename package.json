@@ -11,6 +11,9 @@
         "dev:blog": "eleventy --serve",
         "build:blog": "eleventy && pagefind --site _site --root-selector .terminal-body",
         "validate": "bun scripts/validate-content.ts",
+        "render:banner": "bun scripts/render-brand.ts banner",
+        "render:logo": "bun scripts/render-brand.ts logo",
+        "render:brand": "bun scripts/render-brand.ts all",
         "prebuild": "bun run validate",
         "build": "bun run build:blog"
     },
