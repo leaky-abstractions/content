@@ -4,7 +4,7 @@
         text-anchor="middle"
         dominant-baseline="central"
         font-family="'JetBrains Mono', monospace"
-        font-size="380"
+        font-size="300"
         font-weight="700"
         fill="#61afef">{;}</text>
 </svg>

@@ -157,18 +157,14 @@
                 left: 0;
                 border-color: rgba(97, 175, 239, 0.6);
             }
-            .zone-std {
+            /* All-devices / SAFE zone — single source of truth per the 2026
+               YouTube spec: 1546 × 423, centered. Critical content (logos,
+               text) MUST live inside this box. */
+            .zone-safe {
                 width: 1546px;
                 height: 423px;
                 top: 508px;
                 left: 507px;
-                border-color: rgba(86, 182, 194, 0.65);
-            }
-            .zone-safe {
-                width: 1235px;
-                height: 338px;
-                top: 551px;
-                left: 662px;
                 border-color: rgba(152, 195, 121, 0.85);
             }
 
@@ -182,26 +178,25 @@
                 padding: 0;
             }
 
-            /* Terminal window — width matches the SAFE zone so the window column
-       never bleeds outside the mobile-visible area horizontally.
-       **Symmetric** vertical padding (17px top / 17px bottom) so the
-       window is centered in the Standard zone. Chrome bar (26px) ends
-       exactly at SAFE-top — strictly invisible on mobile, no overlap.
-       Math: window_top (525) + chrome_height (26) = 551 = SAFE-top.
-       Padding (17) + chrome (26) = 43 = fixed gap Standard-top→SAFE-top. */
+            /* Terminal window — floats inside the SAFE zone with 24px padding
+       on all sides, so the window's drop shadow has room to breathe and
+       the design reads as "terminal window sitting inside the safe area"
+       rather than filling it edge-to-edge.
+       SAFE zone: 1546 × 423 at (507, 508)
+       Window:    1498 × 375 at (531, 532) — inset 24 on all sides */
             .b-window {
                 position: absolute;
-                top: 525px;
-                left: 662px;
-                width: 1235px;
-                height: 389px;
+                top: 532px;
+                left: 531px;
+                width: 1498px;
+                height: 375px;
                 background: var(--od-bg);
                 border-radius: 14px;
                 overflow: hidden;
                 box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
             }
             .b-window-chrome {
-                height: 26px;
+                height: 36px;
                 background: var(--od-surface2);
                 padding: 0 22px;
                 display: flex;
@@ -219,18 +214,14 @@
             }
             .b-window-chrome .cb-title {
                 color: var(--od-fg);
-                font-size: 15px;
+                font-size: 26px;
                 font-weight: 700;
                 line-height: 1;
-                /* `~` is a high-diacritic glyph in monospace fonts — sits in the
-           upper portion of its em box. Nudge down 2px to visually center
-           the glyph (not just the bounding box) in the chrome bar. */
-                margin-top: 2px;
             }
             .b-window-chrome .cb-dot {
                 display: block;
-                width: 12px;
-                height: 12px;
+                width: 16px;
+                height: 16px;
                 border-radius: 999px;
                 flex-shrink: 0;
             }
@@ -256,29 +247,27 @@
                 margin-left: 4px;
             }
 
-            /* Main content — sits inside the SAFE zone, top-aligned. The 18px top
-       padding gives visible breathing room between the chrome bar's bottom
-       edge (exactly at SAFE-top y=551) and the first command line. Side
-       padding (22px) matches chrome so content's left edge aligns with
-       the traffic-light dots. */
+            /* Main content — overlays the window body area (everything below
+       the 36px chrome bar). Window is 1498 × 375 at (531, 532), chrome
+       occupies the top 36px, leaving 1498 × 339 for content from y=568. */
             .b-main {
                 position: absolute;
-                top: 551px;
-                left: 662px;
-                width: 1235px;
-                height: 338px;
-                padding: 22px 28px 22px;
+                top: 568px;
+                left: 531px;
+                width: 1498px;
+                height: 339px;
+                padding: 10px 32px 20px;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
-                font-size: 22px;
+                font-size: 26px;
                 line-height: 1.4;
             }
             .b-main .line {
-                margin-bottom: 2px;
+                margin-bottom: 8px;
             }
             .b-main .blank {
-                height: 10px;
+                height: 8px;
             }
             .b-main .path {
                 color: var(--od-green);
@@ -331,10 +320,10 @@
                 grid-template-rows: repeat(2, auto);
                 grid-auto-flow: column;
                 grid-auto-columns: max-content;
-                column-gap: 36px;
-                row-gap: 6px;
-                margin-top: 6px;
-                font-size: 22px;
+                column-gap: 60px;
+                row-gap: 8px;
+                margin-top: 2px;
+                font-size: 28px;
             }
             .b-main .topic {
                 white-space: nowrap;
@@ -562,17 +551,12 @@
                                 ><span class="topic-name">systems-programming</span><span class="topic-slash">/</span>
                             </div>
                         </div>
-                        <div class="blank"></div>
-                        <div class="line">
-                            <span class="path">~</span> <span class="dollar">$</span> <span class="b-cursor"></span>
-                        </div>
                     </div>
 
                     <!-- Zone overlays (drawn on top, after content) -->
                     <div class="zone zone-tv"><span class="zone-label">TV / 4K — 2560 × 1440</span></div>
                     <div class="zone zone-desk"><span class="zone-label">Desktop band — 2560 × 423</span></div>
-                    <div class="zone zone-std"><span class="zone-label">Standard (tablet+) — 1546 × 423</span></div>
-                    <div class="zone zone-safe"><span class="zone-label">SAFE (all devices) — 1235 × 338</span></div>
+                    <div class="zone zone-safe"><span class="zone-label">SAFE (all devices) — 1546 × 423</span></div>
                 </div>
             </div>
         </div>
