@@ -24,6 +24,9 @@ Thumbs.db
 .claude/
 .superpowers/
 
+# Worktrees
+.worktrees/
+
 # Motion Canvas output
 output/
 **/output/
