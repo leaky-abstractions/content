@@ -12,7 +12,7 @@ jobs:
         name: Validate
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: oven-sh/setup-bun@v2
             - run: bun install --frozen-lockfile
             - run: bun cli validate
@@ -23,7 +23,7 @@ jobs:
         name: Type-check
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: oven-sh/setup-bun@v2
             - run: bun install --frozen-lockfile
             - run: bunx tsc --noEmit --project tsconfig.json
@@ -33,7 +33,7 @@ jobs:
         name: Render brand
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: oven-sh/setup-bun@v2
             - uses: browser-actions/setup-firefox@v1
               with:
@@ -46,7 +46,7 @@ jobs:
         name: Build site
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: oven-sh/setup-bun@v2
             - run: bun install --frozen-lockfile
             - run: bun run build
@@ -59,7 +59,7 @@ jobs:
         needs: [validate, render]
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - uses: oven-sh/setup-bun@v2
             - uses: browser-actions/setup-firefox@v1
               with:
