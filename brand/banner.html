@@ -3,14 +3,61 @@
     <head>
         <meta charset="utf-8" />
         <title>Leaky Abstractions — YouTube Banner Design Reference</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
         <style>
+            @font-face {
+                font-family: 'JetBrains Mono';
+                font-weight: 400;
+                font-style: normal;
+                font-display: block;
+                src: url('./fonts/JetBrainsMono-Regular.woff2') format('woff2');
+            }
+            @font-face {
+                font-family: 'JetBrains Mono';
+                font-weight: 700;
+                font-style: normal;
+                font-display: block;
+                src: url('./fonts/JetBrainsMono-Bold.woff2') format('woff2');
+            }
+            /* Font Awesome 6 Free Solid — vendored. Only the 6 icons used by this
+               banner have ::before content rules. See brand/fonts/font-awesome-LICENSE.txt. */
+            @font-face {
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                font-style: normal;
+                font-display: block;
+                src: url('./fonts/fa-solid-900.woff2') format('woff2');
+            }
+            .fa-solid {
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                font-style: normal;
+                font-variant: normal;
+                text-rendering: auto;
+                line-height: 1;
+                display: inline-block;
+            }
+            .fa-solid::before {
+                font-feature-settings: normal;
+                font-variant: normal;
+            }
+            .fa-code::before {
+                content: '\f121';
+            }
+            .fa-sitemap::before {
+                content: '\f0e8';
+            }
+            .fa-square-root-variable::before {
+                content: '\f698';
+            }
+            .fa-microchip::before {
+                content: '\f2db';
+            }
+            .fa-gamepad::before {
+                content: '\f11b';
+            }
+            .fa-gears::before {
+                content: '\f085';
+            }
             :root {
                 /* One Dark palette — verified from themes.js */
                 --od-bg: #282c34; /* base00 */

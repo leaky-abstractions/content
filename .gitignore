@@ -4,6 +4,7 @@ node_modules/
 # Build output
 _site/
 dist/
+tmp/
 
 # Cache
 .cache/
@@ -23,6 +24,11 @@ Thumbs.db
 .remember/
 .claude/
 .superpowers/
+
+# Environment
+.env
+.env.*
+!.env.example
 
 # Worktrees
 .worktrees/

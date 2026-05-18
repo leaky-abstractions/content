@@ -18,6 +18,13 @@
             "@style/*": ["packages/style/src/*"]
         }
     },
-    "include": ["env.d.ts", "packages/**/*.ts", "packages/**/*.tsx", "episodes/**/*.ts", "episodes/**/*.tsx"],
-    "exclude": ["node_modules", "_site", "dist"]
+    "include": [
+        "env.d.ts",
+        "packages/**/*.ts",
+        "packages/**/*.tsx",
+        "episodes/**/*.ts",
+        "episodes/**/*.tsx",
+        "cli/**/*.ts"
+    ],
+    "exclude": ["node_modules", "_site", "dist", "cli/lib/__fixtures__/**"]
 }

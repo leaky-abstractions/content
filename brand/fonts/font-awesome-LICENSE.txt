@@ -1,0 +1,19 @@
+Font Awesome Free 6.5.1 — https://fontawesome.com
+
+The vendored woff2 file (fa-solid-900.woff2) is the "Solid" font weight from
+the Font Awesome Free distribution.
+
+License (per https://fontawesome.com/license/free):
+
+  - Icons (the visual designs): Creative Commons Attribution 4.0 International
+    (CC BY 4.0). https://creativecommons.org/licenses/by/4.0/
+
+  - Fonts (the .woff2/.ttf font files themselves): SIL Open Font License 1.1.
+    https://scripts.sil.org/OFL
+
+  - Code (the surrounding CSS/JS in the official FA distribution): MIT.
+
+Attribution is satisfied by retaining this file alongside the font and
+crediting Font Awesome in any user-facing documentation. The renderer in
+this repo uses the icons only as part of YouTube channel art — not as a
+redistributable end-user product.

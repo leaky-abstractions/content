@@ -1,0 +1,37 @@
+name: Sync
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - 'brand/**'
+            - 'channel/**'
+            - 'episodes/**'
+            - 'schemas/**'
+            - 'cli/**'
+    workflow_dispatch: {}
+
+concurrency:
+    group: youtube-sync
+    cancel-in-progress: false
+
+jobs:
+    sync:
+        name: Brand & channel sync
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: oven-sh/setup-bun@v2
+            - uses: browser-actions/setup-firefox@v1
+              with:
+                  firefox-version: latest-esr
+            - run: bun install --frozen-lockfile
+            - run: bun cli validate
+            - run: bun cli render brand --out=./tmp/brand
+            - run: bun cli youtube channel sync
+            - run: bun cli youtube video sync
+            - run: bun cli youtube playlist sync
+        env:
+            YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+            YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+            YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}

@@ -19,6 +19,7 @@ Performance & resilience:
 - [ ] Verify reading progress bar — `.reading-progress` element exists in the chrome; confirm it actually fills as you scroll.
 
 Content infrastructure:
+- [x] CLI restructure + channel-level brand pipeline (Phase 0+1 of content-pipeline-v2) — `bun cli` replaces `scripts/`; `brand/**` and `channel/**` changes auto-sync to YouTube via `.github/workflows/sync.yml`.
 - [ ] Archive page — full chronological list of all episodes, useful once homepage's "latest 5" outgrows itself.
 - [ ] About / colophon page — content page about the author + the site's stack. Adds personality and is a natural target for the "mrbandler" author link.
 - [ ] Better 404 — current 404 is functional but minimal. Could be more whimsical / on-brand (fake `core dumped`, ASCII art, etc.).
